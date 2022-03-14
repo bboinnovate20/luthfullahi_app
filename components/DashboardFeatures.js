@@ -4,8 +4,12 @@ import { mainFeatures } from '../data/features'
 import AppText from './AppText'
 import AppButton from '../components/AppButton'
 import colors from '../config/color'
+import { useNavigation } from '@react-navigation/native'
 
 export default function DashboardFeatures() {
+
+    const navigation = useNavigation()
+
   return (
     
     <>
@@ -16,7 +20,7 @@ export default function DashboardFeatures() {
                 keyExtractor= {(item) => item.id.toString()}
                 numColumns={4}
                 renderItem= {({item}) => 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate(item.name)}>
                        <View style={{width:90, justifyContent: 'center', justifyContent: 'flex-start'}}>
                            <View style={{height:75, flexDirection:'row', justifyContent:'center', overflow:'hidden', borderRadius: 100, alignItems: 'center', width: "100%", heigh: "100%"}}>
                             {item.icon}
@@ -32,8 +36,8 @@ export default function DashboardFeatures() {
                 } 
                 />
 
-                    <AppButton>
-                        Explore more ...
+                    <AppButton color='red' onPress={() => navigation.navigate('Subcription')}>
+                        Subcribe for more features
                     </AppButton>            
         </View>
 

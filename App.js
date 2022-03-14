@@ -7,20 +7,31 @@ import AppNavigation from './components/AppNavigation'
 import AppQuran from './screens/AppQuran'
 import AppQuranDetails from './screens/AppQuranDetail'
 import AppShare from './screens/AppShare'
+import AppHadith from './screens/AppHadtih'
+import { NavigationContainer } from '@react-navigation/native'
+import _AppNavigation from './navigation/_AppNavigation'
+import TabNavigation from './navigation/TabNavigation'
 
 export default function App(props) {
   return (
     // <AppWelcomeScreen />
     <>
-      <>
-        {/* <AppDashBoard /> */}
-        {/* <AppQuran /> */}
-        {/* <AppQuranDetails /> */}
-        <AppShare/>
-        
-      </>
+      <NavigationContainer>
+          {/* <_AppNavigation /> */}
+          <TabNavigation/>
+      </NavigationContainer>
       <OctraMarketAds />
-      <AppNavigation />
     </>
+   
+    // // <>
+    // //   <>
+    // //     <AppDashBoard />
+    //     {/* <AppQuran /> */}
+    //     {/* <AppQuranDetails /> */}
+    //     {/* <AppShare/> */}
+    //     {/* <AppHadith /> */}
+    //   </>
+    //   // <AppNavigation />
+    // </>
   )
 }

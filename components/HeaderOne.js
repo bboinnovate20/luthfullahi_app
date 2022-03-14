@@ -1,6 +1,7 @@
 import {View, Text, Image, StyleSheet} from 'react-native'
 import AppText from './AppText'
 import colors from '../config/color'
+import { getFontScale } from 'react-native/Libraries/Utilities/PixelRatio'
 
 export default function HeaderOne({isBoth = true, right, left, children}) {
 
@@ -26,6 +27,7 @@ const style = StyleSheet.create({
     header: {
         backgroundColor: colors.tertiaryColor, 
         width: "110%", 
+        transform: [{scale: 1.1}],
         marginTop:-25,
         paddingTop: 15, 
         marginBottom:10,  
@@ -33,8 +35,10 @@ const style = StyleSheet.create({
         flexDirection: 'row', 
         marginLeft: '-5%', 
         justifyContent: 'space-around', 
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 200
     }
+
 })
 
 

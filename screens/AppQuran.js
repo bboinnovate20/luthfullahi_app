@@ -7,28 +7,33 @@ import {eachSurah} from '../data/eachSurah'
 import colors from '../config/color'
 
 import HeaderOne from '../components/HeaderOne'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 
-export default function AppQuran(props) {
+export default function AppQuran({navigation}) {
 
     function renderTemplate(no, surahInEnglish, verse, surahInArabic) {
-        return (<View style={style.container}>
-                <View style={{justifyContent: 'center'}}>
-                    <ImageBackground source={require('../assets/icons/verse_indicator.png')} resizeMode='contain'
-                        style={{width: 50, height: 50, flex: 1, justifyContent: 'center', alignItems: 'center'}}
-                    >
-                        <AppText _style={{fontSize: 20}}>{no}</AppText>
-                    </ImageBackground>
+        return (
+        <TouchableOpacity onPress={() => navigation.navigate('QuranDetails', {id:no})}>
+            <View style={style.container}>
+                    <View style={{justifyContent: 'center'}}>
+                        <ImageBackground source={require('../assets/icons/verse_indicator.png')} resizeMode='contain'
+                            style={{width: 50, height: 50, flex: 1, justifyContent: 'center', alignItems: 'center'}}
+                        >
+                            <AppText _style={{fontSize: 20}}>{no}</AppText>
+                        </ImageBackground>
 
+                    </View>
+                    <View style={{flexBasis: 150}}>
+                        <AppText _style={{fontSize: 20, fontWeight: 'bold'}}>{surahInEnglish}</AppText>
+                        <AppText>{verse} - VERSES</AppText>
+                    </View>
+                    <View style={{flexBasis: '30%', alignItems: 'flex-end'}}>
+                        <AppText>{surahInArabic}</AppText>
+                    </View>
                 </View>
-                <View style={{flexBasis: '30%'}}>
-                    <AppText _style={{fontSize: 20, fontWeight: 'bold'}}>{surahInEnglish}</AppText>
-                    <AppText>{verse} - VERSES</AppText>
-                </View>
-                <View style={{flexBasis: '40%', alignItems: 'flex-end'}}>
-                    <AppText>{surahInArabic}</AppText>
-                </View>
-            </View>)
+        </TouchableOpacity>
+        )
     }
     return (
         <SafeViewScreen>

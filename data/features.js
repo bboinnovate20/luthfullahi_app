@@ -18,21 +18,21 @@ export const mainFeatures = [
     },
     {
         id: 3,
-        name: 'Fiqh',
+        name: 'Fiqhu',
         icon: icon.Fiqh,
         size: '55%',
         bgColor: colors.lightYellow
     },
     {
         id: 3,
-        name: 'Dua & Dhikr',
+        name: 'Dua',
         icon: icon.Dua,
         size: '55%',
         bgColor: colors.lightYellow
     },
     {
         id: 4,
-        name: 'Prayer Time',
+        name: 'PrayerTime',
         icon: icon.PrayerTime,
         size: '80%',
         bgColor: colors.secondaryColor
@@ -46,7 +46,7 @@ export const mainFeatures = [
     },
     {
         id: 6,
-        name: 'E-Tesbih',
+        name: 'ETesbih',
         icon: icon.Dua,
         size: '60%',
         bgColor: colors.secondaryColor

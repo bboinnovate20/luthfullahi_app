@@ -10,7 +10,7 @@ import { verses } from '../data/eachVerse'
 
 
 
-export default function AppQuranDetails(props) {
+export default function AppQuranDetails({route, navigation}) {
 
     const [defaultSize, reset] = useState([28, 18])
 
@@ -19,7 +19,7 @@ export default function AppQuranDetails(props) {
             <View style={style.container}>
                     <View style={{flexBasis: '5%', justifyContent: 'space-between', height: 60, alignItems: 'center', marginTop: 20 }}>
                        <TouchableOpacity>{icons.play}</TouchableOpacity> 
-                       <TouchableOpacity>{icons.share}</TouchableOpacity>   
+                       <TouchableOpacity onPress={() => {navigation.navigate('Share')}}>{icons.share}</TouchableOpacity>   
                     </View>
                     <View style={{flexBasis: '90%'}}>
                         <View style={style.arabic}>
@@ -40,6 +40,14 @@ export default function AppQuranDetails(props) {
         )
     }
 
+    //temporary function
+
+    function findSurah(id) {
+        const surah = eachSurah.find((each) => each.id === id)
+        return surah.surahInEnglish
+    }   
+
+
     return (
         <SafeViewScreen >
             <FlatList
@@ -54,9 +62,9 @@ export default function AppQuranDetails(props) {
 
                 ListHeaderComponent={() => (
                     <View>
-                        <AppText _style={{textAlign: 'center', fontSize: 22, marginBottom: -5}}>SURAT FATHIA</AppText>
+                        <AppText _style={{textAlign: 'center', fontSize: 22, marginBottom: -5}}>Surat-l-{findSurah(route.params.id)}</AppText>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10, alignItems: 'center'}}>
-                            <TouchableOpacity>{icons.back}</TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.goBack()}>{icons.back}</TouchableOpacity>
                             <View style=
                                     {{backgroundColor: colors.tertiaryColor, 
                                     flexBasis: '85%', alignItems: 'center',
