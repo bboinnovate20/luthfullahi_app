@@ -1,48 +1,63 @@
-import { View, Text, StyleSheet, FlatList, ImageBackground, Image} from 'react-native'
+import { View, Text, StyleSheet, FlatList, VirtualizedList, ImageBackground, Image} from 'react-native'
 
-import React from 'react'
+import React, { useEffect, useState,useMemo }  from 'react'
 import AppText from '../components/AppText'
 import SafeViewScreen from '../components/SafeViewScreen'
 import {eachSurah} from '../data/eachSurah'
 import colors from '../config/color'
+import allSurah from '../data/allSurah'
+
 
 import HeaderOne from '../components/HeaderOne'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+import ActivityIndicator from '../components/ActivityIndicator'
+import AppQuranListing from '../components/AppQuranListing'
 
-export default function AppQuran({navigation}) {
+import QuranAppText from '../components/QuranAppText'
 
-    function renderTemplate(no, surahInEnglish, verse, surahInArabic) {
-        return (
-        <TouchableOpacity onPress={() => navigation.navigate('QuranDetails', {id:no})}>
-            <View style={style.container}>
-                    <View style={{justifyContent: 'center'}}>
-                        <ImageBackground source={require('../assets/icons/verse_indicator.png')} resizeMode='contain'
-                            style={{width: 50, height: 50, flex: 1, justifyContent: 'center', alignItems: 'center'}}
-                        >
-                            <AppText _style={{fontSize: 20}}>{no}</AppText>
-                        </ImageBackground>
+const AppQuran = React.memo(({navigation}) => {
 
-                    </View>
-                    <View style={{flexBasis: 150}}>
-                        <AppText _style={{fontSize: 20, fontWeight: 'bold'}}>{surahInEnglish}</AppText>
-                        <AppText>{verse} - VERSES</AppText>
-                    </View>
-                    <View style={{flexBasis: '30%', alignItems: 'flex-end'}}>
-                        <AppText>{surahInArabic}</AppText>
-                    </View>
-                </View>
-        </TouchableOpacity>
-        )
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
+
+
+    useEffect(() => {
+        loadQuran();
+
+        return setData([]);
+    }, [])
+    
+    async function loadQuran() {    
+        const result = allSurah()
+
+        if(result) {
+            setTimeout(() => {
+                setData(result)
+                setLoading(false)
+            }, 1000)
+        }
     }
     return (
         <SafeViewScreen>
-            <FlatList
-            data={eachSurah}
-            keyExtractor= {(item) => item.id.toString()}
+            {
+                loading ? <ActivityIndicator visible={loading} /> :
+           
+            <VirtualizedList
+            data={data}
+            // initialNumToRender={}
+            getItem={(data, index) => ({
+                surah_id: data[index].id,
+                surah_name: data[index].transliteration,
+                surah_verse_count: data[index].total_verses,
+                surah_name_arabic: data[index].name
+            })}
+            getItemCount={(data) => data.length}
+            keyExtractor= {(item) =>item.surah_id}
             
             renderItem= {({item}) => 
-               renderTemplate(item.id, item.surahInEnglish, item.verses, item.surahInArabic)
+                <AppQuranListing no={item.surah_id} surahInEnglish={item.surah_name} verse={item.surah_verse_count} surahInArabic={item.surah_name_arabic}/>
+                //  renderTemplate(item.surah_id, item.surah_name, item.surah_verse_count, item.surah_name_arabic)
             }
             ItemSeparatorComponent={() =>
                 <View style={{width:12}}></View>
@@ -57,11 +72,11 @@ export default function AppQuran({navigation}) {
             />      
            
 
-            
+            }
         </SafeViewScreen>
     )
 
-}
+})
 
 const style = StyleSheet.create({
     container: {
@@ -84,3 +99,6 @@ const style = StyleSheet.create({
 
     }
 })
+
+
+export default AppQuran;

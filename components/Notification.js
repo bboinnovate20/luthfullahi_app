@@ -5,23 +5,30 @@ import notification from '../data/notification'
 import colors from '../config/color'
 import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
 import AppButton from './AppButton'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useNavigation } from '@react-navigation/native'
 
-export default function Notification() {
-  function renderTemplate(title, content, date) {
+export default function Notification({onPress}) {
+
+  const navigation = useNavigation()
+
+  function renderTemplate(title, content, date, id) {
     return (
-      <View style={style.container}>
-        <View style={style.date}>
-          <AppText _style={{color: '#fff'}}>{date.day}</AppText>
-          <AppText _style={{color: '#fff', fontSize:15}}>{date.month}</AppText>
+      <TouchableOpacity  onPress={() =>onPress(id)}>
+        <View style={style.container}>
+          <View style={style.date}>
+            <AppText _style={{color: '#fff'}}>{date.day}</AppText>
+            <AppText _style={{color: '#fff', fontSize:15}}>{date.month}</AppText>
+          </View>
+          <View  style={style.content}>
+            <AppText _style={{fontSize:16, fontWeight: 'bold' }}>{title}</AppText>
+            <AppText numberOfLines={1}  >{content}</AppText>
+          </View>
+          <View style={style.next}>
+            <Image source={require('../assets/icons/arrow-front.png')}></Image>
+          </View>
         </View>
-        <View  style={style.content}>
-          <AppText _style={{fontSize:16, fontWeight: 'bold' }}>{title}</AppText>
-          <AppText numberOfLines={1}  >{content}</AppText>
-        </View>
-        <View style={style.next}>
-          <Image source={require('../assets/icons/arrow-front.png')}></Image>
-        </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 
@@ -65,7 +72,7 @@ export default function Notification() {
                 keyExtractor= {(item) => item.id.toString()}
                 
                 renderItem= {({item}) => 
-                  renderTemplate(item.title, item.content, item.date)        
+                  renderTemplate(item.title, item.content, item.date, item.id)        
                 }
                 ItemSeparatorComponent={() =>
                     <View style={{width:12}}></View>
@@ -79,7 +86,7 @@ export default function Notification() {
                 }
                 />      
         </View>
-        <AppButton _style={{alignSelf: 'center'}} >See more notification</AppButton>     
+           
     </>
   )
 }

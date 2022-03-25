@@ -28,6 +28,7 @@ export default function HeaderDetail({topHeader, source, nav, includeImage = tru
 const style = StyleSheet.create({
     text: {
         color: "#000",
-        fontSize: 27
+        fontSize: 27,
+        padding: 10,
     }
 })

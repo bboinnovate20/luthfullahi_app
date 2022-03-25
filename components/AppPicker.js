@@ -6,21 +6,22 @@ import AppText from './AppText';
 import { amount } from '../data/subcriptionAmount';
 import colors from '../config/color';
 import SafeViewScreen from './SafeViewScreen';
-export default function AppPicker({placeholder, onSelectItem, data, selectedItem }) {
+
+export default function AppPicker({placeholder, onSelectItem, numOfColumn, data, selectedItem, property, wrapperStyle, _style, text }) {
     const [showModal, setModal] = useState(false)
 
     return (
-        <View>
-            <TouchableOpacity onPress={() => setModal(true)}>
-                <View style={style.container}>
-                    <AppText _style={style.amount}>{selectedItem ? selectedItem : placeholder}</AppText>
+        <View style={wrapperStyle && {alignItems: 'flex-end'}}>
+            <TouchableOpacity onPress={() => setModal(true)} style={wrapperStyle}>
+                <View style={[style.container, _style]}>
+                    <AppText numberOfLines={1}  _style={[style.amount, text]}>{selectedItem ? selectedItem : placeholder}</AppText>
                 </View>
             </TouchableOpacity>
             <Modal visible={showModal} animationType="slide">
                 <SafeViewScreen>
                     <FlatList
                         // horizontal={true}
-                        numColumns={2}
+                        numColumns={numOfColumn || 2}
                        data={data}
                        keyExtractor={(item) => item.id }
                        renderItem={({item}) => 
@@ -28,7 +29,7 @@ export default function AppPicker({placeholder, onSelectItem, data, selectedItem
                             {onSelectItem(item)
                             setModal(false)}
                         }>
-                           <AppText _style={style.headlines} >{item.amount}</AppText>
+                           <AppText  _style={style.headlines} >{property ? item[property] : item.amount}</AppText>
                        </TouchableOpacity>
                         }
                     />

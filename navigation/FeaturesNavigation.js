@@ -20,6 +20,8 @@ import AppLuthResources from "../screens/AppLuthResource";
 import AppAboutDonation from "../screens/AppAboutDonation";
 import AppDonate from "../screens/AppDonate";
 import AppDonationPage from "../screens/AppDonationPage";
+import AppNotificationContent from "../screens/AppNotificationContent";
+import AppOtherNotification from "../screens/AppOtherNotification";
 
  const Stack = createStackNavigator();
  
@@ -150,6 +152,20 @@ export function Donate() {
             <Stack.Screen name="AboutDonate" component={AppAboutDonation}/>
             <Stack.Screen name="AmountPage" component={AppDonationPage}/>
             
+
+        </Stack.Navigator>
+    )
+    
+}
+
+export function Notification() {
+    return (
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+            
+        }}>
+            <Stack.Screen name="Notification" component={AppOtherNotification}/>
+            <Stack.Screen name="ContentNotification" component={AppNotificationContent}/>
 
         </Stack.Navigator>
     )

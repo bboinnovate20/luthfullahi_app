@@ -3,10 +3,12 @@ import react from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import AppShare from "../screens/AppShare";
 import AppDashBoard from "../screens/AppDashBoard";
-import {CalenderNavigation, Donate, Dua, FiqhuNavigation, HadithNavigation, LuthResources, PrayerTime, QiblaNavigation, QuranNavigation} from '../navigation/FeaturesNavigation'
+import {CalenderNavigation, Donate, Dua, FiqhuNavigation, HadithNavigation, LuthResources, Notification, PrayerTime, QiblaNavigation, QuranNavigation} from '../navigation/FeaturesNavigation'
 import AppTesbih from "../screens/AppTesbih";
 import AppAboutDonation from "../screens/AppAboutDonation";
 import AppSubcriptionPage from "../screens/AppSubcriptionPage";
+import AppNotificationContent from "../screens/AppNotificationContent";
+import AppOtherNotification from "../screens/AppOtherNotification";
 
 
 
@@ -31,6 +33,8 @@ export default function AppNavigation () {
 
             <Stack.Screen name="AboutDonation" component={AppAboutDonation}/>
             <Stack.Screen name="Subcription" component={AppSubcriptionPage}/>
+            <Stack.Screen name="Notification" component={AppNotificationContent}/>
+            <Stack.Screen name="OtherNotification" component={Notification}/>
 
             <Stack.Screen name="Share" component={AppShare}/>
            

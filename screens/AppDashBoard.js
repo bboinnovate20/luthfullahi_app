@@ -7,11 +7,12 @@ import DashboardFeatures from '../components/DashboardFeatures'
 import Notification from '../components/Notification'
 // import { ScrollView } from 'react-native-virtualized-view'
 import * as icon from '../assets/app_asset/icon/icon'
+import AppButton from '../components/AppButton'
 
 
 
-export default function AppDashBoard() {
-  const scroll = useRef(new Animated.Value(0))
+export default function AppDashBoard({navigation}) {
+  // const scroll = useRef(new Animated.Value(0))
 
   const Item = [
     {
@@ -20,7 +21,11 @@ export default function AppDashBoard() {
     },
     {
       id: 2,
-      item:  <Notification/>
+      item: 
+      <>
+      <Notification onPress={(id) => navigation.navigate('Notification', {id: id} )}/>
+      <AppButton _style={{alignSelf: 'center'}} onPress={() => navigation.navigate('OtherNotification')} >See more notification</AppButton>  
+      </>
     }
   ]
 
