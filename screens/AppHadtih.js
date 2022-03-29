@@ -8,7 +8,7 @@ import colors from '../config/color'
 
 import HeaderOne from '../components/HeaderOne'
 import { hadith } from '../data/hadithsCollection'
-
+import hadithsCollection from '../data/hadithData'
 
 
 export default function AppHadith({navigation}) {
@@ -17,7 +17,7 @@ export default function AppHadith({navigation}) {
             <HeaderOne left="Hadith" right={require('../')}/>
             <FlatList
                 style={{padding: 20}}
-                data={hadith}
+                data={hadithsCollection}
                 keyExtractor={(item)=> item.id}
                 numColumns={2}
                 renderItem={({item}) => (

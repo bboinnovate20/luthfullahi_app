@@ -10,8 +10,7 @@ export async function resumeAudio(objectPlayBack) {
     return await objectPlayBack.setStatusAsync({shouldPlay: true})
 }
 
-export async function playNextAudio(_objectPlayBack, uri, ref) {
-    if(ref) ref(id)
+export async function playNextAudio(_objectPlayBack, uri) {
     await _objectPlayBack.stopAsync()
     await _objectPlayBack.unloadAsync()
     const status = await playAudio(_objectPlayBack, uri)

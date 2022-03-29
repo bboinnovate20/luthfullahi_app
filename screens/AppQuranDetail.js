@@ -1,5 +1,5 @@
 
-import { View,TouchableOpacity, Image, FlatList, Dimensions, Animated, UIManager, findNodeHandle} from 'react-native'
+import { View,TouchableOpacity, Image, FlatList, Dimensions, Animated, BackHandler} from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import {Audio} from 'expo-av'
 
@@ -22,9 +22,7 @@ const PREFIX = 'http://www.everyayah.com/data/'
 const DEVICE_PREFIX = FileSystem.documentDirectory
 
 export default function AppQuranDetails({route, navigation}) {
-
     const totalVerse = getQuran(route.params.id).total_verses;
-
     //states
     const [fontSize, setFontSize] = useState([30, 20])
     const [currentReciter, setCurrentReciter] = useState(setCurrentReciterDetails(1))
@@ -41,7 +39,9 @@ export default function AppQuranDetails({route, navigation}) {
 
     useEffect(() => {
         scrollY.addListener(() => {
-
+            BackHandler.addEventListener('hardwareBackPress', () => {
+                objectPlayBack.unloadAsync()
+            })
         })
     }, [selectedItem])
 
@@ -86,9 +86,6 @@ export default function AppQuranDetails({route, navigation}) {
         const audioName = combineVerseChapter(route.params.id,id) + '.mp3'
         return PREFIX + currentReciter.name + currentReciter.suffix + audioName;
     }
-
-   
- 
 
     // /-----------------------------------/
     async function checkIfDirectoryExist(currentReciter) {
@@ -159,14 +156,11 @@ export default function AppQuranDetails({route, navigation}) {
         return uri
     }
 
-     // /-----------------------------------/268
-    
-
+     // /-----------------------------------/
     async function playMusic(id) {
         let uri = await _getURI(id, currentReciter.name)
-        moveTo(id)
+        // moveTo(id)
         setIndex(id)
-        console.log(view)
             if(soundObject === null) {
                 setCurrentAudio(id)
                 setSelectedItem(id)
@@ -178,10 +172,12 @@ export default function AppQuranDetails({route, navigation}) {
     
                 return playbackObject.setOnPlaybackStatusUpdate(async (onPlayback) => {
                     if(onPlayback.didJustFinish) {
-                            if(indexRef.current < totalVerse) {
+                        if(indexRef.current < totalVerse) {
                                 const index = updateIndex()
                                 const uri = await _getURI(index, currentReciter.name)
-                                const status = await playNextAudio(playbackObject, uri, moveTo(id))
+                                const status = await playNextAudio(playbackObject, uri)
+                                // moveTo(index) 
+                            
                                 if(status){
                                     setCurrentAudio(0)
                                     setSelectedItem(0)
@@ -202,7 +198,7 @@ export default function AppQuranDetails({route, navigation}) {
             if(soundObject.isLoaded) {
                 //pause audio
                 if(currentAudio != id && (soundObject.isPlaying || !soundObject.isPlaying)) {
-                    const [status] = await playNextAudio(objectPlayBack, uri, moveTo(id))
+                    const [status] = await playNextAudio(objectPlayBack, uri)
                     setSoundObject({...status})
                     setCurrentAudio(id)
                     setSelectedItem(id)
@@ -224,15 +220,7 @@ export default function AppQuranDetails({route, navigation}) {
                     return setSoundObject({...status})
                 }
             }
-        // }
-
-       
-
-        //playaudio
     }
-
-    const view = useRef(0)
-
     function moveTo(id) {
         verseRender.current.scrollToOffset({
             offset: 200 * id
@@ -262,11 +250,10 @@ export default function AppQuranDetails({route, navigation}) {
             
             <RenderVerse onPress={() => {
                 playMusic(item.id)
-                moveTo(item.id)
             }} 
                 icon={selectedItem == item.id ? 'stop' : 'play'}
                 id={item.id} fontSize={fontSize} content={item.text} transliteration={item.transliteration} english={item.translation} 
-                _style = {(selectedItem === item.id) ? {backgroundColor: '#CECDCD30'}: {backgroundColor: 'transparent'}}
+                _style = {(selectedItem === item.id) ? {backgroundColor: '#CECDCD70'}: {backgroundColor: 'transparent'}}
                 
             />
             }

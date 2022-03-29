@@ -2,20 +2,22 @@ import AppText from "../components/AppText";
 
 
 import Content from '../components/Content'
-import { content } from "../data/fiqhu";
+import { fiqhuContent } from "../data/fiqhu";
 
 export default function  AppFiqhuContent({route}) {
 
-    function findContent () {
-        let level = content.find((e) => e.level === route.params.level) 
-        level = level.subtopic
-        subtopics = level.find((e) => e.id === route.params.id)
 
-        return subtopics.content
+    function findContent (level, id) {
+       const _level = fiqhuContent.find((fiqhu) => fiqhu.level === level).subtopic
+
+       return  _level.find((fq) => fq.id === id).content
+
     }
 
     return (
-        <Content data={findContent()} />
-        // <AppText>ddd</AppText>
+        <Content headerName={route.params.name} imageInclude={false} 
+            data={findContent(route.params.level, route.params.id)}
+        />
+
     )
 }
