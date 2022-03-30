@@ -24,7 +24,7 @@ const RenderVerse = forwardRef(({content, id, english, transliteration, fontSize
                     </View>
                     <View style={{flexBasis: '90%'}}>
                         <View style={style.arabic}>
-                            <QuranAppText _style={{fontSize: fontSize[0], marginBottom: 10, lineHeight: 66}}>{content}
+                            <QuranAppText  _style={{fontSize: fontSize[0], marginBottom: 10, lineHeight: 66}}>{content}
                             <View>
                                 <ImageBackground source={require('../assets/icons/verse_indicator.png')} resizeMode='contain'
                                     style={{ width: 40, height:40, justifyContent: 'center', alignItems: 'center', marginTop: 15}}

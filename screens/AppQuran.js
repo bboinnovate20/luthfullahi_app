@@ -35,7 +35,7 @@ const AppQuran = React.memo(({navigation}) => {
             setTimeout(() => {
                 setData(result)
                 setLoading(false)
-            }, 1000)
+            }, 500)
         }
     }
     return (

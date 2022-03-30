@@ -10,13 +10,21 @@ import { duaContent } from '../data/duas'
 
 export default function AppDuaMain({navigation, route}) {
    
+    function contentFind() {
+        const find = duaContent.find((dua) => dua.id === route.params.id)
+
+        return find.content
+    }
    
     return (
-        
-           <Content data={duaContent[route.params.id]} 
-                    headerName={route.params.name} 
-                    imageInclude={false} 
-            />
+        <>
+        <Content data={contentFind()} 
+                 headerName={route.params.content} 
+                 imageInclude={false} 
+                 duaContent={true} />
+                
+            
+        </>
 
     )
 }

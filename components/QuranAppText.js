@@ -4,13 +4,13 @@ import React from 'react'
 import * as Fonts from 'expo-font'
 
 
-export default function QuranAppText({children, _style, font, ...props}) {
+export default function QuranAppText({children, _style, font, source, font2, ...props}) {
 
     const [loaded, setLoad] = useState(false)
 
     async function useFont() {
         await Fonts.loadAsync({
-            'ArabicFont': require('../assets/fonts/premium_font3.ttf')
+            'ArabicFont': font2 ? require('../assets/fonts/me_quran.ttf') : require('../assets/fonts/premium_font3.ttf')
         })
     }
     if(!loaded) {   
