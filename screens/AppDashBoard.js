@@ -5,14 +5,13 @@ import SafeViewScreen from '../components/SafeViewScreen'
 import colors from '../config/color'
 import DashboardFeatures from '../components/DashboardFeatures'
 import Notification from '../components/Notification'
-// import { ScrollView } from 'react-native-virtualized-view'
+
 import * as icon from '../assets/app_asset/icon/icon'
 import AppButton from '../components/AppButton'
-
+import { getGregoryDate, getHijriDate } from '../misc/misc'
 
 
 export default function AppDashBoard({navigation}) {
-  // const scroll = useRef(new Animated.Value(0))
 
   const Item = [
     {
@@ -43,13 +42,13 @@ export default function AppDashBoard({navigation}) {
           
             <View style={[style.header]}>
               <View>
-                <AppText _style={style.dateText}>Thursday, 24 February</AppText>
+                <AppText _style={style.dateText}>{getGregoryDate()}</AppText>
                 <AppText _style={[style.dateText, { 
                   backgroundColor: colors.secondaryColor,
                   padding: 6,
                   borderRadius: 8,
                   color: '#000'
-                  }]}>23 Rajab 1442 AH</AppText>
+                  }]}>{getHijriDate()}</AppText>
               </View>
               <View style={{flexDirection: 'row', paddingRight: 10, alignItems: 'center'}}>
                 <View style={{width:50, height: 50, marginRight: 20}}>

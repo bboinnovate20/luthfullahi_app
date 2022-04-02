@@ -1,10 +1,41 @@
-import { FlatList,ScrollView, ImageBackground, View} from "react-native";
+import { useContext, useEffect, useState } from "react";
+import { render } from "react-dom";
+import { FlatList,ScrollView, ImageBackground, View, TouchableWithoutFeedback} from "react-native";
+import getLocation from "../api/location";
 import AppText from "../components/AppText";
 import SafeViewScreen from "../components/SafeViewScreen";
 import { prayerTime } from "../data/prayerTime";
+import MiscContext from "../misc/context";
+import { getCurrentDate, getGregoryDate, getHijriDate } from "../misc/misc";
 
 export default function  AppPrayerTime({route}) {
 
+    const {data} = useContext(MiscContext)
+    const [timing, setTiming] = useState([])
+
+    function renderDate() {
+        
+    }
+
+    function convertToHours(data) {
+        let time = data.substring(0,5)
+        console.log(time)
+        time = time.split(':')
+
+        time[0] = time[0] % 12 || 12  
+        return time.join(':')
+
+    }
+    useEffect(() => {
+        const dataArray = []
+        console.log(data)
+        for(let d in data) {
+            dataArray.push({name: d, time: convertToHours(data[d]), opt: (d == 'Fajr' | d=='Sunrise') ? 'am' : 'pm'})
+        }
+        console.log(dataArray)
+        setTiming([...dataArray])
+    }, [])
+    
     return (
         <SafeViewScreen>
             <ImageBackground source={require('../assets/prayerbk.png')} style={{width: '100%', height:180, justifyContent: 'center'}} resizeMode='cover'>
@@ -16,19 +47,21 @@ export default function  AppPrayerTime({route}) {
             </ImageBackground>
             <FlatList
                 style={{margin: 20, backgroundColor: '#fff', padding: 10, borderRadius: 20, marginTop: -30}}
-                data={prayerTime}
-                keyExtractor={(item) => item.id}
+                data={timing}
+                keyExtractor={(item) => item.name}
                 renderItem={({item}) => (
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, paddingVertical: 25, borderBottomColor: '#70707040'}}>
-                        <AppText _style={{fontSize: 22}}>{item.name}</AppText>
-                        <AppText _style={{fontSize: 22}}>{item.time}</AppText>
-                    </View>
+                    <TouchableWithoutFeedback >
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', padding: 10, borderBottomWidth: 1, paddingVertical: 25, borderBottomColor: '#70707040'}}>
+                            <AppText _style={{fontSize: 22}}>{item.name}</AppText>
+                            <AppText _style={{fontSize: 22}}>{(item.time) + ` ${item.opt}`}</AppText>
+                        </View>
+                    </TouchableWithoutFeedback>
                 )}
 
                 ListHeaderComponent={() => (
                     <View style={{alignItems:'center'}}>
-                        <AppText _style={{fontSize: 18}}>Tuesday, May 15, 2020</AppText>
-                        <AppText _style={{fontSize: 18}}>07 Rajab, 1443</AppText>
+                        <AppText _style={{fontSize: 18}}>{getGregoryDate()}</AppText>
+                        <AppText _style={{fontSize: 18}}>{getHijriDate()}</AppText>
                     </View>
                 )}
             />
