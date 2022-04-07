@@ -1,5 +1,14 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "color": "#FF231F7C",
+          "sounds": ["./assets/adhan/adhan.wav"]
+        }
+      ]
+    ],
     "name": "luthfullahiApp",
     "slug": "luthfullahiApp",
     "version": "1.0.0",
@@ -24,7 +33,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "useNextNotificationsApi": true,
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED"
+      ],
+      "package": "com.luthfullahiApp.luthfullahiApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

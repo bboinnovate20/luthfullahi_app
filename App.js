@@ -1,4 +1,6 @@
-import { View, Text, StyleSheet, Linking } from 'react-native'
+import {useEffect, useState, useRef} from 'react'
+
+import { View, Text, StyleSheet, Platform } from 'react-native'
 import React from 'react'
 import OctraMarketAds from './components/OctraMarketAds'
 
@@ -8,25 +10,88 @@ import TabNavigation from './navigation/TabNavigation'
 import MiscContext from './misc/context'
 import getLocation from './api/location'
 
-import {useEffect, useState} from 'react'
 import AlertInfo from './components/AlertInfo'
 import * as Location from 'expo-location'
-import { getCurrentDate } from './misc/misc'
+import { addItem, addNotificationListener, getCurrentDate, getItem, getToken, notificationHandler, scheduleNotification } from './misc/misc'
+import {useNetInfo} from '@react-native-community/netinfo'
+import * as Notifications from 'expo-notifications'
 
 export default function App(props) {
 
   const [isPermitted, setPermission] = useState(true)
   const [location, setLocation] = useState([])
   const [data, setData] = useState([])
+  const netInfo = useNetInfo();
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  const notificationFun = async() => {
+    const token = await getToken()
+    if(token) {
+       setExpoPushToken(token.data)
+      notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification)
+        // console.log(notification)
+      })
+
+      responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+        // console.log(response)
+
+      })
+    }
+
+  
+      await Notifications.setNotificationChannelAsync("adhan", {
+        name: "Adhan notification",
+        importance: Notifications.AndroidImportance.HIGH,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF0000",
+        sound: 'adhan.wav',
+      });
+
+    // await scheduleNotification()
+    await Notifications.scheduleNotificationAsync({
+      content: {
+          title: "Adhan Asri Prayer📬",
+          body: 'Mogrib Prayer  is on',
+          // data: { data: 'my data' },
+          sound: 'adhan.wav',
+      },
+        trigger: { 
+            seconds: 1,
+            channelId: "adhan",    
+      },
+    });
+  }
 
   useEffect(() => {
       init()
+      notificationHandler()
+      notificationFun()
+
+      return () => {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
   }, [])
   
   async function init() {
+
       const result = await askPermission()
-      if(result) {
-        await getLocationData()
+
+      if(result){
+        if(netInfo.isInternetReachable){
+          await getLocationData()
+          return;
+        }
+        const timings = await getItem('-timing');
+        if(timings) {
+          setData(timings)
+        }
       }
   }    
     
@@ -37,14 +102,12 @@ export default function App(props) {
 
       if(result.ok) {
         const allMonth = result.data
-        const year = +_hijri[0]
-        const _month = +_hijri[1]
         const day = +_hijri[2]
-        const _allMonth = {...allMonth}
-        const inMonth = _allMonth.data
+        const inMonth = allMonth.data
 
-        inMonth.forEach(element => {
+        inMonth.forEach(async (element) => {
           if(+element['date']['hijri']['day'] == day){
+            await addItem('timing', element['timings'])
             setData(element['timings'])
           }
         });
@@ -54,15 +117,15 @@ export default function App(props) {
 
   async function askPermission() {
     let reqLocation = await  Location.requestForegroundPermissionsAsync()
-
-    if(reqLocation.status !== 'granted') {
+    let reqNotification = await Notifications.requestPermissionsAsync()
+    
+    if(reqLocation.status !== 'granted' && reqNotification.status !== 'granted') {
       setPermission(false)
       return
     }
       
     setPermission(true)
     const _location = await Location.getCurrentPositionAsync({})
-    
     if(_location) {
         setLocation(_location)
         return true

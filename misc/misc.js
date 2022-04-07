@@ -1,3 +1,8 @@
+import * as Notification from 'expo-notifications'
+import momentHijri from "moment-hijri"
+var dayjs = require('dayjs')
+import getMonth from "../data/months"
+
 export async function playAudio(objectPlayBack, uri) {
     return await objectPlayBack.loadAsync({uri}, {shouldPlay: true})
 }
@@ -19,9 +24,7 @@ export async function playNextAudio(_objectPlayBack, uri) {
 
 
 // <------------------------------------>
-import momentHijri from "moment-hijri"
-var dayjs = require('dayjs')
-import getMonth from "../data/months"
+
 
 export function getCurrentDate() {
     const gregorian = dayjs().format('YYYY/MM/DD')
@@ -42,4 +45,65 @@ export function getHijriDate() {
     hijri = hijri.split('/')
     
     return `${hijri[2]} ${getMonth(hijri[1])} ${hijri[0]}`
+}
+
+const prefix = '@luthfullahi'
+
+export async function addItem(key, value) {
+    try {
+        return await AsyncStorage.setItem(prefix+key, JSON.stringify(value))
+    }
+    catch(err) {
+        return null
+    }
+}
+
+ export async function getItem(key) {
+    try {
+       const item = await AsyncStorage.getItem(prefix+key)
+       if(!item) return null
+       return JSON.parse(item)
+    }
+    catch(err) {
+        return null
+    }
+}
+
+export const notificationHandler = () => {
+    Notification.setNotificationHandler({
+        handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: true,
+            shouldSetBadge: false,
+        })
+    })
+}
+
+export const getToken = async () => {
+    try {
+        return await Notification.getExpoPushTokenAsync()
+    }
+    catch (err) {
+        return null
+    }
+}
+
+export const scheduleNotification = async () => {
+
+    await Notification.scheduleNotificationAsync({
+        
+        content: {
+            title: "Adhan Asri Prayer📬",
+            body: 'Asri Prayer is on',
+            data: { data: 'my data' },
+            sound: 'adhan.wav',
+            vibrate: true 
+        },
+          trigger: { 
+              seconds: 1,
+              channelId: "adhan",    
+        },
+          
+    });
+
 }

@@ -13,13 +13,9 @@ export default function  AppPrayerTime({route}) {
     const {data} = useContext(MiscContext)
     const [timing, setTiming] = useState([])
 
-    function renderDate() {
-        
-    }
 
     function convertToHours(data) {
         let time = data.substring(0,5)
-        console.log(time)
         time = time.split(':')
 
         time[0] = time[0] % 12 || 12  
@@ -28,11 +24,9 @@ export default function  AppPrayerTime({route}) {
     }
     useEffect(() => {
         const dataArray = []
-        console.log(data)
         for(let d in data) {
             dataArray.push({name: d, time: convertToHours(data[d]), opt: (d == 'Fajr' | d=='Sunrise') ? 'am' : 'pm'})
         }
-        console.log(dataArray)
         setTiming([...dataArray])
     }, [])
     

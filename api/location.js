@@ -8,8 +8,6 @@ function getLocation(location, month, year) {
         month,
         year
     }
-
-    const url = new URLSearchParams(data)
    return apiClient.get('', {...data})
 }
 
